@@ -1,3 +1,5 @@
+import ProductLists from './components/ProductLists';
+
 function App() {
   return (
     <div className='App'>
@@ -9,9 +11,11 @@ function App() {
             className='ad'
             src={`http://localhost:8000/ads/?r=${Math.floor(Math.random()*1000)}`}
             alt='ad'/>
+
+            
       </header>
 
-      products goes here..
+      <ProductLists/>
     </div>
   );
 }
