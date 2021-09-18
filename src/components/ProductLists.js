@@ -20,7 +20,7 @@ const reducer = (state, action) => {
 function ProductLists() {
     const [products, dispatch] = useReducer(reducer, []);
     const cacheProducts = useRef([]);
-    const currPage = useRef(1);
+    const currPage = useRef(2);
     const [loading, setLoading] = useState(true);
 
 
@@ -58,7 +58,7 @@ function ProductLists() {
     });
 
     useEffect(()=>{
-        fetch('http://localhost:8000/products?_page=0&_limit=15')
+        fetch('http://localhost:8000/products?_page=1&_limit=15')
         .then((response) => response.json())
         .then((responseData) => {
           setLoading(false);
@@ -74,22 +74,51 @@ function ProductLists() {
             currPage.current = currPage.current + 1;
         })
         .catch(error => console.warn(error));
-    }, []);
+    }, []); 
+
+    let currAd = Math.floor(Math.random()*1000);
+    let initAd = currAd;
+    let content = [];
+    let prevAd = currAd;
+    for(let i=0; i < products.length; i++){
+        if(i % 20 === 0 && i > 0){
+            while(currAd === prevAd)
+                currAd = Math.floor(Math.random()*1000);
+            prevAd = currAd;
+            content.push(
+                <center key={'ad' + i} className='ad'>
+                    <p>But first, a word from our sponsors:</p>
+                    <img src={`http://localhost:8000/ads/?r=${currAd}`} alt='ad'/>
+                </center>);
+        }
+        content.push(<Product key={products[i].id} product={products[i]}/>);
+    }
 
 
     return (
         <>
-            <button onClick={()=> dispatch({type: 'SORT-ID'})}>Sort by ID</button>
-            <button onClick={()=> dispatch({type: 'SORT-PRICE'})}>Sort by price</button>
-            <button onClick={()=> dispatch({type: 'SORT-SIZE'})}>Sort by SIZE</button>
-            <div>
-                {products.map((product, i)=>(
-                    <Product key={product.id+i} product={product}/>
-                ))}
+            <center>
+                <h1>Products Grid</h1>
+            </center>
+            <center className='ad'>
+                <p>But first, a word from our sponsors:</p>
+                <img src={`http://localhost:8000/ads/?r=${initAd}`} alt='ad'/>
+            </center>
+            <center style={{width: '100%'}}>
+                <button onClick={()=> dispatch({type: 'SORT-ID'})}>Sort by ID</button>
+                <button onClick={()=> dispatch({type: 'SORT-PRICE'})}>Sort by price</button>
+                <button onClick={()=> dispatch({type: 'SORT-SIZE'})}>Sort by size</button>
+            </center>
+            <div className='container'>
+                {content}
             </div>
             {loading && <h1>loading</h1>}
         </>
     );
+    // {products.map((product, i)=>(
+                    
+    //     <Product key={product.id+i} product={product}/>
+    // ))}
   }
 
   
