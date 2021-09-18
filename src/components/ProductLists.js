@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer, useRef } from 'react';
 // import GifLoading from '.../public/giphy.gif'; // with import
+
 import Product from './Product.js';
 
 const reducer = (state, action) => {
@@ -44,11 +45,11 @@ function ProductLists() {
     const handleScroll = (e) => {
         const isBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight;
         if (isBottom && !loading) {
-            addCache();
-            loadCache();
             if(cacheProducts.current.length === 0){
                 setLoading(true);
             }
+            addCache();
+            loadCache();
         }
     }
     
@@ -112,7 +113,11 @@ function ProductLists() {
             <div className='container'>
                 {content}
             </div>
-            {loading && <h1>loading</h1>}
+            {loading && (
+                <center>
+                    <img src='/giphy.gif' alt="loading"/>
+                </center>
+            )}
         </>
     );
     // {products.map((product, i)=>(
